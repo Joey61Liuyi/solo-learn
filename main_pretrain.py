@@ -66,7 +66,7 @@ def main(cfg: DictConfig):
     cfg = parse_cfg(cfg)
 
     seed_everything(cfg.seed)
-
+    cfg.data.fraction = 0.2
     assert cfg.method in METHODS, f"Choose from {METHODS.keys()}"
 
     if cfg.data.num_large_crops != 2:

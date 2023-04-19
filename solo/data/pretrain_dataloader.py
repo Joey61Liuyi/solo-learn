@@ -362,13 +362,19 @@ def prepare_datasets(
             ) = train_test_split(files, train_size=data_fraction, random_state=42)
             train_dataset.images = files
         else:
-            data = train_dataset.samples
-            files = [f for f, _ in data]
-            labels = [l for _, l in data]
-            files, _, labels, _ = train_test_split(
-                files, labels, train_size=data_fraction, stratify=labels, random_state=42
-            )
-            train_dataset.samples = [tuple(p) for p in zip(files, labels)]
+
+            if hasattr(train_dataset, 'samples'):
+                data = train_dataset.samples
+                files = [f for f, _ in data]
+                labels = [l for _, l in data]
+                files, _, labels, _ = train_test_split(
+                    files, labels, train_size=data_fraction, stratify=labels, random_state=42
+                )
+                train_dataset.samples = [tuple(p) for p in zip(files, labels)]
+            else:
+                data_num = int(len(train_dataset.data) * data_fraction)
+                train_dataset.data = train_dataset.data[:data_num]
+                train_dataset.targets = train_dataset.targets[:data_num]
 
     return train_dataset
 

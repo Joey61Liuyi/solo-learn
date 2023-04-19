@@ -24,10 +24,10 @@ data:
   train_path: "./datasets"
   val_path: "datasets/imagenet100/val"
   format: "image_folder"
-  num_workers: 4
+  num_workers: 64
 optimizer:
   name: "lars"
-  batch_size: 256
+  batch_size: 32
   lr: 0.4
   classifier_lr: 0.1
   weight_decay: 1e-4
@@ -39,7 +39,7 @@ scheduler:
   name: "warmup_cosine"
 checkpoint:
   enabled: True
-  dir: "trained_models"
+  dir: "cifar_10_trained_models_batch32"
   frequency: 1
 auto_resume:
   enabled: True
