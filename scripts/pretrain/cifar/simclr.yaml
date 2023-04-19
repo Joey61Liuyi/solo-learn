@@ -39,7 +39,7 @@ scheduler:
   name: "warmup_cosine"
 checkpoint:
   enabled: True
-  dir: "cifar_10_trained_models_batch32"
+  dir: "cifar_10_trained_models_batch32_all_noise"
   frequency: 1
 auto_resume:
   enabled: True

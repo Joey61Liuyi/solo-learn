@@ -247,8 +247,9 @@ class SimCLR(BaseMethod):
         # diff_num = int(len(indexes)/50)
         # noise_num = 2
 
-        diff_num = 0
+        diff_num = 10
         noise_num = 0
+        t_ = 9
 
         # diff_num = 0
         # noise_num = 7
@@ -261,7 +262,7 @@ class SimCLR(BaseMethod):
             t_original = torch.zeros(data.shape[0], dtype = torch.int64)
             t_original = t_original.to('cuda')
             t = torch.randint(low=0, high=2, size=(data.shape[0],), dtype=torch.int64)
-            t = torch.where(t == 0, torch.tensor(7), torch.tensor(7))
+            t = torch.where(t == 0, torch.tensor(t_), torch.tensor(t_))
             # t = torch.ones(data.shape[0], dtype=torch.int64)
 
             t = t.to('cuda')

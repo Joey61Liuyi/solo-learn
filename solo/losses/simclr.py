@@ -62,7 +62,10 @@ def simclr_loss_func(
     gathered_indexes = gathered_indexes.unsqueeze(0)
     # positives
     pos_mask = indexes.t() == gathered_indexes
+    fake_postive_pair = (gathered_indexes < 0) * (gathered_indexes < 0)
+    pos_mask = pos_mask * (~fake_postive_pair)
     pos_mask[:, z.size(0) * get_rank() :].fill_diagonal_(0)
+
     # negatives
     neg_mask = indexes.t() != gathered_indexes
     fake_negative_pair = (gathered_indexes < 0) * (gathered_indexes < 0)
