@@ -249,6 +249,7 @@ class SimCLR(BaseMethod):
 
         diff_num = 10
         noise_num = 0
+
         t_ = 9
 
         # diff_num = 0
