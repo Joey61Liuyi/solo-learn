@@ -42,7 +42,7 @@ def byol_loss_func(p: torch.Tensor, z: torch.Tensor, simplified: bool = True) ->
     return 2 - 2 * (p * z.detach()).sum(dim=1).mean()
 
 
-def my_byol_loss_func(p: torch.Tensor, z: torch.Tensor, index: list, simplified: bool = True) -> torch.Tensor:
+def my_byol_loss_func(p: torch.Tensor, z: torch.Tensor, neg: torch.Tensor, simplified: bool = True) -> torch.Tensor:
     """Computes BYOL's loss given batch of predicted features p and projected momentum features z.
 
     Args:
@@ -53,23 +53,8 @@ def my_byol_loss_func(p: torch.Tensor, z: torch.Tensor, index: list, simplified:
     Returns:
         torch.Tensor: BYOL's loss.
     """
-
-
-
-
     if simplified:
-
-        target_indexes = torch.where(index[1] == -99999999)
-        data_indexes = torch.where(index[0] != -99999999)
-        target_data = z.detach()[target_indexes]
-        input_data = p[data_indexes]
-
-        negative_loss = 0
-        for one in target_data:
-            tep = one.expand(256, -1)
-            negative_loss += F.cosine_similarity(input_data, tep, dim=-1).mean()
-
-        return 2 - 2 * F.cosine_similarity(p, z.detach(), dim=-1).mean() + 0.5 * negative_loss
+        return 2 * (1 - F.cosine_similarity(p, z.detach(), dim=-1).mean() + F.cosine_similarity(p, neg.detach(), dim=-1).mean())
 
     p = F.normalize(p, dim=-1)
     z = F.normalize(z, dim=-1)

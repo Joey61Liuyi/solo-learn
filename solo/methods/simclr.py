@@ -247,10 +247,9 @@ class SimCLR(BaseMethod):
         # diff_num = int(len(indexes)/50)
         # noise_num = 2
 
-        diff_num = 10
-        noise_num = 0
-
-        t_ = 9
+        diff_num = 0
+        noise_num = 32
+        t_ = 2
 
         # diff_num = 0
         # noise_num = 7

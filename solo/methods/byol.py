@@ -292,35 +292,46 @@ class BYOL(BaseMomentumMethod):
             torch.Tensor: total loss composed of BYOL and classification loss.
         """
 
-        data_new = []
-
-        indexes = batch[0]
         indexes_all = []
+        original = batch[1][0]
+        noise = torch.randn_like(original)
+        t = torch.ones(original.shape[0], dtype=torch.int64)
+        t = t.to('cuda')
+        t *= 9
+        diff_data = self.diffusion_projector.q_sample(x_start=original, t=t, noise=noise)
+        batch[1].append(diff_data)
 
-        for data in batch[1]:
+        # for data in batch[1]:
+        #
+        #     noise = torch.randn_like(data)
+        #     index_noise = torch.ones_like(indexes)
+        #     index_noise = index_noise[:2]
+        #     index_noise *= -99999999
+        #     noise = noise[:2]
+        #     data_new.append(torch.cat([data, noise]))
+        #     indexes_all.append(torch.cat([indexes, index_noise]))
+        # batch[1] = data_new
+        # batch[2] = torch.cat([batch[2], batch[2][:2]])
 
-            noise = torch.randn_like(data)
-            index_noise = torch.ones_like(indexes)
-            index_noise = index_noise[:2]
-            index_noise *= -99999999
-            noise = noise[:2]
-            data_new.append(torch.cat([data, noise]))
-            indexes_all.append(torch.cat([indexes, index_noise]))
+        self.num_crops += 1
+        self.num_large_crops += 1
 
-        batch[1] = data_new
-        batch[2] = torch.cat([batch[2], batch[2][:2]])
         out = super().training_step(batch, batch_idx)
+
 
         class_loss = out["loss"]
         Z = out["z"]
         P = out["p"]
         Z_momentum = out["momentum_z"]
 
-        # ------- negative consine similarity loss -------
+        self.num_large_crops -= 1
+        self.num_crops -= 1
+
+        # ------- consine similarity loss -------
         neg_cos_sim = 0
         for v1 in range(self.num_large_crops):
             for v2 in np.delete(range(self.num_crops), v1):
-                neg_cos_sim += my_byol_loss_func(P[v2], Z_momentum[v1], [indexes_all[v2], indexes_all[v1]])
+                neg_cos_sim += my_byol_loss_func(P[v2], Z_momentum[v1], Z_momentum[2])
 
         # calculate std of features
         with torch.no_grad():
@@ -335,7 +346,7 @@ class BYOL(BaseMomentumMethod):
         return neg_cos_sim + class_loss
 
 
-    def training_step_original(self, batch: Sequence[Any], batch_idx: int) -> torch.Tensor:
+    def training_step_ori(self, batch: Sequence[Any], batch_idx: int) -> torch.Tensor:
         """Training step for BYOL reusing BaseMethod training step.
 
         Args:

@@ -343,7 +343,7 @@ def test_down_stream_acc(train_images, train_labels, test_images, test_labels):
     train_dataloader = DataLoader(train_dataset, batch_size= 256, shuffle=True)
     test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 
-    logreg = nn.Sequential(nn.Linear(512, 100))
+    logreg = nn.Sequential(nn.Linear(512, 10))
     logreg = logreg.to('cuda')
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(params=logreg.parameters(), lr=3e-3)
@@ -426,8 +426,6 @@ def draw_test_plot(clip_symble = True):
     print(f'mean {mean}, std {std}')
 
 
-
-
 def uniform_loss(x, t=2):
     return torch.pdist(x, p=2).pow(2).mul(-t).exp().mean().log()
 
@@ -443,8 +441,8 @@ if __name__ == '__main__':
 
 
     prefix = 'noise_only_'
-    method = 'byol'
-    dataset = 'cifar100'
+    method = 'simclr'
+    dataset = 'cifar10'
 
     train_images = torch.load(prefix+method+'_'+dataset+'_train_feature.pt')
     train_labels = torch.load(prefix+method+'_'+dataset+'_train_label.pt')

@@ -9,7 +9,7 @@ from solo.data.classification_dataloader import prepare_data
 from solo.utils.checkpointer import Checkpointer
 
 kwargs = {
-    "num_classes": 100,
+    "num_classes": 10,
     "cifar": True,
     "max_epochs": 100,
     "optimizer": "sgd",
@@ -24,11 +24,11 @@ kwargs = {
     "lr_decay_steps": [60, 80],
     "batch_size": 128,
     "num_workers": 4,
-    "pretrained_feature_extractor": "trained_models_diff_7_2/simclr/s63x2uev/simclr-cifar100-s63x2uev-ep=999.ckpt"
+    "pretrained_feature_extractor": "cifar_10_trained_models_batch32_32_noise/simclr/w3nll2eu/simclr-cifar10-w3nll2eu-ep=999.ckpt"
 }
 
-method = 'byol'
-dataset = 'cifar100'
+method = 'simclr'
+dataset = 'cifar10'
 
 # if method == 'byol':
 #     kwargs['pretrained_feature_extractor'] = "trained_models/byol/1e7w3aum/byol-cifar100-1e7w3aum-ep=999.ckpt"
