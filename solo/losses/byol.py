@@ -54,7 +54,7 @@ def my_byol_loss_func(p: torch.Tensor, z: torch.Tensor, neg: torch.Tensor, simpl
         torch.Tensor: BYOL's loss.
     """
     if simplified:
-        return 2 * (1 - F.cosine_similarity(p, z.detach(), dim=-1).mean() + F.cosine_similarity(p, neg.detach(), dim=-1).mean())
+        return 2 - 2 * F.cosine_similarity(p, z.detach(), dim=-1).mean() + F.cosine_similarity(p, neg.detach(), dim=-1).mean()
 
     p = F.normalize(p, dim=-1)
     z = F.normalize(z, dim=-1)

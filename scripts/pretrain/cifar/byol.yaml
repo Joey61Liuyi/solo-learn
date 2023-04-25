@@ -42,7 +42,7 @@ scheduler:
   name: "warmup_cosine"
 checkpoint:
   enabled: True
-  dir: "trained_models_BYOL_step9"
+  dir: "trained_models_BYOL_ORI"
   frequency: 1
 auto_resume:
   enabled: True

@@ -24,7 +24,7 @@ kwargs = {
     "lr_decay_steps": [60, 80],
     "batch_size": 128,
     "num_workers": 4,
-    "pretrained_feature_extractor": "cifar_10_trained_models_batch32_32_noise/simclr/w3nll2eu/simclr-cifar10-w3nll2eu-ep=999.ckpt"
+    "pretrained_feature_extractor": "trained_models_BYOL_ori/byol/tghp56pb/byol-cifar10-tghp56pb-ep=999.ckpt"
 }
 
 method = 'simclr'
